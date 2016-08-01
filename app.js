@@ -35,6 +35,7 @@ app.use(function(req, res, next) {
 });
 
 /// error handlers
+/*
 
 // development error handler
 // will print stacktrace
@@ -57,4 +58,5 @@ app.use(function(err, req, res, next) {
 });
 
 
+*/
 module.exports = app;

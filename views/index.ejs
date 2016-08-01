@@ -1,12 +1,78 @@
 <!DOCTYPE html>
 <html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
-<body>
 
-<div ng-app="">
- 	<p>Name: <input type="text" ng-model="name"></p>
- 	<p ng-bind="name"></p>
-</div>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<link rel="stylesheet" href="stylesheets/style.css">
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<body>
+   <section  class="well" ng-app="myApp" ng-controller="myCtrl as tab">
+        <ul class="nav nav-pills">
+            <li ng-class="{active:tab.isSet(1)}"><a href ng-click="tab.setTab(1)">Today</a></li>
+            <li ng-class="{active:tab.isSet(2)}"><a href ng-click="tab.setTab(2)">Tomorrow</a></li>
+            <li ng-class="{active:tab.isSet(3)}"><a href ng-click="tab.setTab(3)">Day after tomorrow</a></li>
+        </ul>
+        
+        <div ng-show="tab.isSet(1)">
+  		<p>
+		    <h1 class="fuild-title">{{weatherData.data[0].current.day}}, {{weatherData.data[0].current.date}}</span><img ng-src="{{weatherData.data[0].current.imageUrl}}"/></h1><br>
+			<h1 class="fluid-title"><small>{{weatherData.data[0].current.observationpoint}}</small></h1><br>
+			<h2 class="fluid-title"><small>Temperature :</small>{{weatherData.data[0].current.temperature}}<small><sup>&#8457;</sup></small></h2><br>
+			Feelslike : {{weatherData.data[0].current.feelslike}}<br>
+			Humidity : {{weatherData.data[0].current.humidity}}<br>
+			
+			Observation time : {{weatherData.data[0].current.observationtime}}<br>
+			Day : {{weatherData.data[0].current.shortday}}<br>
+			Sky : {{weatherData.data[0].current.skytext}}<br>
+			
+			Windspeeds : {{weatherData.data[0].current.windspeed}}<br>
+		</p>
+        </div>
+        <div ng-show="tab.isSet(2)">
+			<p>
+				<h1 class="fuild-title">{{weatherData.data[0].forecast[2].day}}, {{weatherData.data[0].forecast[2].date}}</span><img ng-src="{{weatherData.data[0].current.imageUrl}}"/></h1><br>
+				<h3 class="fluid-title"><small>Highest Temperature :</small>{{weatherData.data[0].forecast[2].high}}<small><sup>&#8457;</sup></small></h3><br>
+				<h3 class="fluid-title"><small>Lowest Temperature :</small>{{weatherData.data[0].forecast[2].low}}<small><sup>&#8457;</sup></small></h3><br>
+				Day : {{weatherData.data[0].forecast[2].shortday}}<br>
+				Sky : {{weatherData.data[0].forecast[2].skytextday}}<br>
+			</p>
+        </div>
+        <div ng-show="tab.isSet(3)">
+             <h4>Tab 3</h4>
+        </div>
+    </section>
+<script>
+	(function () {
+	var app = angular.module('myApp', []);
+	app.controller('myCtrl', function($http,$scope) {
+		
+	    this.tab = 1;
+
+        this.setTab = function (tabId) {
+            this.tab = tabId;
+			console.log("Reached the tabid:" + tabId);
+        };
+
+        this.isSet = function (tabId) {
+            return this.tab === tabId;
+        };
+	$http.get('/weather').then(function(response){
+		console.log("Request served");
+		console.log(response);
+		$scope.weatherData=response;
+		console.log(response.data[0].forecast[2]);
+	})
+	
+	});
+})();
+</script>
 
 </body>
 </html>
